@@ -4,13 +4,14 @@ import _ from 'lodash';
 import { data as users } from '../data/users';
 import { inRadius } from '../utils/location';
 
-export function getUsers(ctx: RouterContext, next:Next) {
+export const getUsers = (ctx: RouterContext, next:Next) => {
   const {
     emailContains, coordinate, radius, fields,
   } = ctx.query;
   let resultUsers = _.cloneDeep(users);
   if (emailContains) {
     // @ts-ignore
+    // eslint-disable-next-line max-len
     resultUsers = _.filter(resultUsers, (val) => val.email.toLowerCase().includes(emailContains.toLowerCase()));
   }
   if (coordinate) {
@@ -38,4 +39,4 @@ export function getUsers(ctx: RouterContext, next:Next) {
   }
   ctx.body = resultUsers;
   return next();
-}
+};

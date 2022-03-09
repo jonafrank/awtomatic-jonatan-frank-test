@@ -1,12 +1,15 @@
-import Koa from 'koa';
+import Koa, { Context, Next } from 'koa';
 import Router from '@koa/router';
-import { getUsers } from './controller/users';
+import { getUsers } from './middleware/users';
+import { auth } from './middleware/authorization';
+import { notFound } from './middleware/notFound';
 
-const app = new Koa();
+export const app = new Koa();
 const router = new Router();
+router.use(auth)
+  .get('/users', getUsers);
 
-router.get('/users', getUsers);
+app.use(router.routes())
+  .use(router.allowedMethods());
 
-app.use(router.routes());
-console.log(app);
-app.listen(3000);
+export const server = app.listen(3000);
